@@ -1,0 +1,43 @@
+# bulk water
+
+units           metal
+boundary        p p p
+atom_style      charge
+
+newton off
+kspace_style pppm 0.000001
+neigh_modify one 10000
+
+read_data	system.data
+
+
+
+dielectric 78.3
+
+velocity        all create 300.0 23456789
+
+
+
+pair_style hybrid/overlay nequip  coul/long  20.0   gauss/cut  1.5
+pair_coeff  * * coul/long
+pair_coeff * *  nequip  /scratch/tn51/ttd110/nequip-data/training/kc4/results/default_KCl/kcl-deployted.pth  O H K Cl
+pair_coeff * *   gauss/cut 0.0 1.0 1.0 0.1
+pair_coeff 1 2  gauss/cut 0.1 1.325 .06 1.5
+
+
+
+fix             1 all nvt temp 300.0 300.0 .05 
+timestep        0.0005
+thermo_style    custom step pe ke etotal temp press vol
+thermo          100
+dump		1 all custom 20 KCl-out.lammpstrj id element xu yu zu
+dump_modify     1 element O H K Cl
+
+restart 	50000 restartfile1 restartfile2
+
+
+read_dump /scratch/tn51/ttd110/LAMMPS/KCl-6p6M/KCl-SPCEflex.lammpstrj 500000  x y z  box no format native
+reset_timestep 0
+
+
+run             1000000

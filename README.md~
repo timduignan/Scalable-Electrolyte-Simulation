@@ -1,0 +1,11 @@
+# Scalable Molecular Simulation of Electrolyte Solutions with Quantum Chemical Accuracy
+
+This repository contains the data and scripts necessary to reproduce the results presented in the paper:
+**"Scalable molecular simulation of electrolyte solutions with quantum chemical accuracy"** by Junji Zhang, Joshua Pagotto, Tim Gould, and Timothy T. Duignan.
+
+## Contents
+
+- **Figs.ipynb**: A Jupyter notebook that calculates all key quantities and generates all plots using the raw data found in the `Data` directory.
+- **Input Files**: Contains all input files used to generate the training data with CP2K, the Nequip training config files and trained models, and the LAMMPS files to run the NNP-MD simulations.
+- **Scripts**: Includes various scripts for converting file formats and computing Radial Distribution Functions (RDFs).
+- **Data**: The Data directory contains all raw data used in the simulations.

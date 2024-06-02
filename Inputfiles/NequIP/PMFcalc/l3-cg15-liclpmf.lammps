@@ -1,0 +1,40 @@
+# bulk water
+
+units           metal
+boundary        p p p
+atom_style      charge
+
+newton off
+kspace_style pppm 0.000001
+
+neighbor        2.0 bin
+neigh_modify    every 10 delay 0 check no
+
+read_data	system.data-bigbox
+
+
+
+dielectric 78.3
+
+velocity        all create 300.0 23456789
+
+pair_style hybrid/overlay nequip  coul/long  10.0  
+pair_coeff  * * coul/long
+pair_coeff * *  nequip  /scratch/tn51/ttd110/nequip-data/training/l3-cg15/results/default_LiCl/licl-deployted.pth  Li Cl
+
+
+thermo_style    custom pe
+thermo_modify format float %20.10f
+log pe.dat
+thermo          1
+dump		1 all custom 1 LiCl-out.lammpstrj id element xu yu zu
+dump		2 all custom 1 LiCl-out-frc.lammpstrj id element fx fy fz
+dump_modify     1 element Li Cl
+dump_modify     2 element Li Cl
+
+
+
+rerun ionion.xyz dump x y z box no format xyz
+
+
+

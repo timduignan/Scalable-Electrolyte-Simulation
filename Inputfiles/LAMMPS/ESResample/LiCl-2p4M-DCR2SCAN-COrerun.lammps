@@ -1,0 +1,35 @@
+# bulk water
+
+units           metal
+boundary        p p p
+atom_style      charge
+
+newton off
+kspace_style pppm 0.000001
+
+neighbor        2.0 bin
+neigh_modify    every 10 delay 0 check no
+
+read_data	system.data
+mass 		1 16
+mass		2 1
+mass            3 23
+mass            4 35
+
+
+dielectric 78.3
+
+velocity        all create 300.0 23456789
+
+pair_style coul/long  10.0
+pair_coeff * *
+
+thermo_style    custom step pe ke etotal temp press vol
+thermo          1
+dump		1 all custom 1 LiCl-R2SCAN-COalt.lammpstrj id element xu yu zu 
+dump 		2 all custom 1 LiCl-R2SCAN-COalt-frc.lammpstrj id element fx fy fz
+dump_modify     1 element O H Li Cl
+dump_modify     2 element O H Li Cl
+
+
+rerun /scratch/tn51/ttd110/CP2K/LiCl-DCR2SCAN-reftraj/LiCl-DCR2SCAN-full-pos-1.xyz  dump x y z box no format xyz  

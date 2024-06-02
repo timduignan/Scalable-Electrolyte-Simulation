@@ -1,0 +1,29 @@
+# bulk water
+
+units           metal
+boundary        p p p
+atom_style      atomic
+newton off
+
+neighbor        2.0 bin
+neigh_modify    every 10 delay 0 check no
+
+read_data	final.lammpstrj
+mass 		1 16
+mass		2 2
+
+pair_style	nequip 
+pair_coeff * *    /scratch/tn51/ttd110/nequip-data/training/l3/results/default_LiCl/licl-deployted.pth  O H 
+
+
+velocity        all create 300.0 23456789
+
+
+fix             1 all nvt temp 300.0 300.0 .05
+timestep        0.0005
+thermo_style    custom step pe ke etotal temp press vol
+thermo          100
+dump		1 all custom 20 water.lammpstrj id element xu yu zu
+dump_modify     1 element O H 
+
+run             100000
